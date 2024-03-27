@@ -1,7 +1,7 @@
 import { useSelector, useDispatch } from 'react-redux'
 import PropTypes  from 'prop-types'
 import { voteAnecdote } from '../reducers/anecdoteReducer'
-import { setNotification, removeNotification } from '../reducers/notificationReducer'
+import { changeNotification } from '../reducers/notificationReducer'
 
 const Anecdote = ({anecdote, vote}) => {
     return (
@@ -11,7 +11,7 @@ const Anecdote = ({anecdote, vote}) => {
             </div>
             <div>
                 has {anecdote.votes} 
-                <button onClick={() => vote(anecdote.id)}>vote</button>
+                <button onClick={() => vote(anecdote)}>vote</button>
             </div>
         </div>
     )
@@ -30,12 +30,9 @@ const Anecdotes = () => {
 
     const filteredAnecdotes = anecdotes.filter(anecdote=>anecdote.content.includes(filter));
   
-    const vote = (id) => {
-        dispatch(voteAnecdote(id))
-        dispatch(setNotification('You voted "' +anecdotes.find(anecdote=>anecdote.id === id).content + '"'))
-        setTimeout(() => {
-            dispatch(removeNotification())
-        }, 5000)
+    const vote = (anecdote) => {
+        dispatch(voteAnecdote(anecdote))
+        dispatch(changeNotification('You voted "' +anecdote.content + '"', 5))
     }
 
     const sortAnecdotes = (anecdotes) => {
